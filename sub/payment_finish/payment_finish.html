@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 정보 입력 | 입덕볶이</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/payment_finish.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <a href="../payment/payment.html" class="back-btn">〈</a>
+        <a href="../../index.html" class="page-logo">입덕볶이</a>
+        <span class="header-space"></span>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <p class="eyebrow">ORDER INFORMATION</p>
+            <h1>주문 정보 입력</h1>
+            <p>마지막으로 주문 정보를 확인해 주세요.</p>
+        </section>
+
+        <form id="orderForm">
+            <section class="form-section">
+                <h2>주문자 정보</h2>
+
+                <label for="customerName">이름</label>
+                <input type="text" id="customerName" placeholder="이름을 입력해 주세요." required>
+
+                <label for="customerPhone">연락처</label>
+                <input type="tel" id="customerPhone" placeholder="010-0000-0000" required>
+            </section>
+
+            <section class="form-section">
+                <h2>배달 주소</h2>
+
+                <label for="postcode">우편번호</label>
+                <div class="address-row">
+                    <input type="text" id="postcode" placeholder="우편번호" required>
+                    <button type="button" id="addressSearch">주소 입력</button>
+                </div>
+
+                <label for="address">주소</label>
+                <input type="text" id="address" placeholder="기본 주소를 입력해 주세요." required>
+
+                <label for="addressDetail">상세 주소</label>
+                <input type="text" id="addressDetail" placeholder="상세 주소를 입력해 주세요.">
+            </section>
+
+            <section class="form-section">
+                <h2>요청 사항</h2>
+                <select id="requestMessage">
+                    <option value="">요청 사항을 선택해 주세요.</option>
+                    <option value="문 앞에 놓아주세요.">문 앞에 놓아주세요.</option>
+                    <option value="벨을 눌러주세요.">벨을 눌러주세요.</option>
+                    <option value="전화 후 방문해 주세요.">전화 후 방문해 주세요.</option>
+                    <option value="직접 입력">직접 입력</option>
+                </select>
+
+                <textarea id="customRequest" placeholder="추가 요청 사항을 입력해 주세요."></textarea>
+            </section>
+
+            <section class="form-section">
+                <h2>결제 수단</h2>
+
+                <div class="payment-options">
+                    <label>
+                        <input type="radio" name="paymentMethod" value="신용카드" checked>
+                        <span>신용카드</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="paymentMethod" value="간편결제">
+                        <span>간편결제</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="paymentMethod" value="현장결제">
+                        <span>현장결제</span>
+                    </label>
+                </div>
+            </section>
+
+            <div class="prototype-notice">
+                실제 결제 서비스가 연결되지 않은 화면 시제품입니다.
+                입력한 정보는 실제 주문이나 결제에 사용되지 않습니다.
+            </div>
+
+            <button type="submit" class="submit-btn">주문 완료하기</button>
+        </form>
+    </main>
+</div>
+
+<div class="complete-overlay" id="completeOverlay">
+    <div class="complete-box">
+        <div class="complete-icon">✓</div>
+        <p class="complete-label">ORDER COMPLETE</p>
+        <h2>주문 정보 입력 완료!</h2>
+        <p>시제품 화면 확인이 완료되었어요.</p>
+        <button type="button" id="homeBtn">메인으로 돌아가기</button>
+    </div>
+</div>
+
+<script>
+const orderForm = document.getElementById('orderForm');
+const completeOverlay = document.getElementById('completeOverlay');
+
+document.getElementById('addressSearch').addEventListener('click', () => {
+    alert('주소 검색 기능은 별도 API 연결이 필요합니다. 주소를 직접 입력해 주세요.');
+});
+
+document.getElementById('requestMessage').addEventListener('change', function() {
+    const customRequest = document.getElementById('customRequest');
+
+    if (this.value === '직접 입력') {
+        customRequest.focus();
+    } else if (this.value) {
+        customRequest.value = this.value;
+    }
+});
+
+orderForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const cart = JSON.parse(localStorage.getItem('ipdeokCart') || '[]');
+
+    if (cart.length === 0) {
+        alert('장바구니가 비어 있습니다.');
+        location.href = '../lists/lists.html';
+        return;
+    }
+
+    if (!orderForm.reportValidity()) return;
+
+    completeOverlay.classList.add('show');
+    localStorage.removeItem('ipdeokCart');
+});
+
+document.getElementById('homeBtn').addEventListener('click', () => {
+    location.href = '../../index.html';
+});
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 완료 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/payment_finish.css">
+    <script src="js/payment_finish.js" defer></script>
+</head>
+<body>
+
+<main class="finish-page">
+    <header class="header">
+        <a href="../../index.html">
+            <img src="../../img/LOGO.png" alt="입덕볶이">
+        </a>
+    </header>
+
+    <section class="finish-content">
+        <div class="finish-check">✓</div>
+        <p class="eyebrow">ORDER COMPLETE</p>
+        <h1>주문이 완료됐어요!</h1>
+        <p class="finish-description">떠기가 맛있게 준비해서 배달할게!</p>
+
+        <div class="order-info">
+            <div>
+                <span>주문 상태</span>
+                <strong id="currentStatus">주문 확인 중</strong>
+            </div>
+            <div>
+                <span>결제 금액</span>
+                <strong id="orderTotal">0원</strong>
+            </div>
+        </div>
+
+        <section class="progress-section">
+            <h2>배달 현황</h2>
+            <p>주문부터 배달 완료까지 확인할 수 있어요.</p>
+
+            <div class="progress-list">
+                <div class="progress-item current" data-step="0">
+                    <span class="progress-dot">1</span>
+                    <div>
+                        <strong>주문 확인 중</strong>
+                        <small>주문이 정상적으로 접수됐어요.</small>
+                    </div>
+                </div>
+
+                <div class="progress-item" data-step="1">
+                    <span class="progress-dot">2</span>
+                    <div>
+                        <strong>조리 중</strong>
+                        <small>맛있게 조리하고 있어요.</small>
+                    </div>
+                </div>
+
+                <div class="progress-item" data-step="2">
+                    <span class="progress-dot">3</span>
+                    <div>
+                        <strong>픽업 완료</strong>
+                        <small>음식이 배달원에게 전달됐어요.</small>
+                    </div>
+                </div>
+
+                <div class="progress-item" data-step="3">
+                    <span class="progress-dot">4</span>
+                    <div>
+                        <strong>배달 중</strong>
+                        <small>음식이 고객님께 이동 중이에요.</small>
+                    </div>
+                </div>
+
+                <div class="progress-item" data-step="4">
+                    <span class="progress-dot">5</span>
+                    <div>
+                        <strong>배달 완료</strong>
+                        <small>맛있게 드세요!</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <p class="demo-notice">
+            실제 배달 시스템과 연결된 상태가 아닌 화면 시연용 진행 버튼이에요.
+        </p>
+
+        <button type="button" id="nextStatusBtn" class="next-status-button">
+            다음 배달 단계 보기
+        </button>
+
+        <a href="../../index.html" class="home-button">홈으로 돌아가기</a>
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <a href="../../index.html" class="back-btn">〈</a>
+        <a href="../../index.html" class="page-logo">입덕볶이</a>
+        <span class="header-space"></span>
+    </header>
+
+    <main>
+
+        <section class="page-heading">
+            <p class="eyebrow">MY ORDER</p>
+            <h1>장바구니</h1>
+            <p>주문할 메뉴를 확인해 주세요.</p>
+        </section>
+
+        <section class="cart-section">
+
+            <div class="cart-title">
+                <h2>주문 메뉴</h2>
+                <span id="cartCount">0개</span>
+            </div>
+
+            <div id="cartList"></div>
+
+            <div class="empty-cart" id="emptyCart" hidden>
+                <div class="empty-icon">♡</div>
+                <h3>장바구니가 비어 있어요.</h3>
+                <p>맛있는 메뉴를 담아볼까요?</p>
+                <a href="../lists/lists.html" class="primary-btn">
+                    메뉴 보러가기
+                </a>
+            </div>
+
+        </section>
+
+        <section class="price-summary" id="priceSummary" hidden>
+
+            <h2>결제 금액</h2>
+
+            <div class="price-row">
+                <span>상품 금액</span>
+                <strong id="productTotal">0원</strong>
+            </div>
+
+            <div class="price-row">
+                <span>배달비</span>
+                <strong>0원</strong>
+            </div>
+
+            <div class="price-divider"></div>
+
+            <div class="price-row final-price">
+                <span>총 주문 금액</span>
+                <strong id="finalTotal">0원</strong>
+            </div>
+
+        </section>
+
+        <section class="notice">
+            <p>※ 현재는 화면 확인용 시제품입니다.</p>
+            <p>표시된 가격은 메뉴 구성에 따라 자동으로 계산됩니다.</p>
+            <p>실제 결제 및 배달 기능은 연결되어 있지 않습니다.</p>
+        </section>
+
+        <button type="button" class="checkout-btn" id="checkoutBtn">
+            주문 정보 입력하기
+        </button>
+
+    </main>
+
+</div>
+
+<script>
+/* =========================
+   메뉴 가격표
+========================= */
+
+const menuPrices = {
+
+    tteokbokki: {
+        '입덕볶이': {
+            '혼자볶이': 8900,
+            '둘이볶이': 13900,
+            '셋이볶이': 18900
+        },
+        '달달볶이': {
+            '혼자볶이': 8900,
+            '둘이볶이': 13900,
+            '셋이볶이': 18900
+        },
+        '위염볶이': {
+            '혼자볶이': 8900,
+            '둘이볶이': 13900,
+            '셋이볶이': 18900
+        },
+        '크림볶이': {
+            '혼자볶이': 9900,
+            '둘이볶이': 14900,
+            '셋이볶이': 19900
+        },
+        '로제볶이': {
+            '혼자볶이': 9900,
+            '둘이볶이': 14900,
+            '셋이볶이': 19900
+        },
+        '바질볶이': {
+            '혼자볶이': 9900,
+            '둘이볶이': 14900,
+            '셋이볶이': 19900
+        },
+        '마라볶이': {
+            '혼자볶이': 9900,
+            '둘이볶이': 14900,
+            '셋이볶이': 19900
+        },
+        '말차볶이': {
+            '혼자볶이': 10900,
+            '둘이볶이': 15900,
+            '셋이볶이': 20900
+        },
+        '해물볶이': {
+            '혼자볶이': 11900,
+            '둘이볶이': 16900,
+            '셋이볶이': 21900
+        }
+    },
+
+    side: {
+        '혼자튀김': 4500,
+        '둘이튀김': 7500,
+        '누드순대': 5000,
+        '꼬치어묵': 3500,
+        '주먹밥': 3000,
+        '계란찜': 4000,
+        '감자튀김': 3500
+    },
+
+    drink: {
+        '콜라': 2000,
+        '사이다': 2000,
+        '쿨피스': 2000,
+        '우유': 1500,
+        '제로콜라': 2000,
+        '제로사이다': 2000,
+        '단지우유': 2000,
+        '오렌지주스': 2500,
+        '환타': 2000
+    }
+
+};
+
+const extraPrices = {
+    '떡': 1000,
+    '어묵': 1000,
+    '소세지': 1000,
+    '당면': 1000,
+    '중국당면': 1500,
+    '분모자': 1500,
+    '유부': 1000
+};
+
+const allowedSizes = [
+    '혼자볶이',
+    '둘이볶이',
+    '셋이볶이'
+];
+
+const allowedExtras = Object.keys(extraPrices);
+
+
+/* =========================
+   요소 가져오기
+========================= */
+
+const cartList = document.getElementById('cartList');
+const emptyCart = document.getElementById('emptyCart');
+const cartCount = document.getElementById('cartCount');
+
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+const priceSummary = document.getElementById('priceSummary');
+const productTotal = document.getElementById('productTotal');
+const finalTotal = document.getElementById('finalTotal');
+
+
+/* =========================
+   가격 표시
+========================= */
+
+function formatPrice(price) {
+    return Number(price || 0).toLocaleString('ko-KR') + '원';
+}
+
+
+/* =========================
+   장바구니 데이터
+========================= */
+
+function getCart() {
+    try {
+        const savedCart = JSON.parse(
+            localStorage.getItem('ipdeokCart')
+        );
+
+        return Array.isArray(savedCart) ? savedCart : [];
+
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem(
+        'ipdeokCart',
+        JSON.stringify(cart)
+    );
+}
+
+
+/* =========================
+   메뉴 가격 계산
+========================= */
+
+function getItemPrice(item) {
+
+    const category = item.category;
+
+    if (category === 'tteokbokki') {
+
+        const size = allowedSizes.includes(item.size)
+            ? item.size
+            : '혼자볶이';
+
+        const basePrice =
+            menuPrices.tteokbokki[item.name]?.[size] || 0;
+
+        const extras = Array.isArray(item.extras)
+            ? item.extras
+            : Array.isArray(item.toppings)
+                ? item.toppings
+                : [];
+
+        const toppingPrice = extras.reduce((sum, extra) => {
+            return sum + (extraPrices[extra] || 0);
+        }, 0);
+
+        return {
+            basePrice,
+            toppingPrice,
+            unitPrice: basePrice + toppingPrice
+        };
+    }
+
+    const basePrice = menuPrices[category]?.[item.name] || 0;
+
+    return {
+        basePrice,
+        toppingPrice: 0,
+        unitPrice: basePrice
+    };
+}
+
+
+/* =========================
+   장바구니 가격 저장
+========================= */
+
+function updateCartPrices(cart) {
+
+    cart.forEach(item => {
+
+        const priceInfo = getItemPrice(item);
+
+        const quantity = Math.max(
+            1,
+            Number(item.quantity) || 1
+        );
+
+        item.quantity = quantity;
+        item.basePrice = priceInfo.basePrice;
+        item.toppingPrice = priceInfo.toppingPrice;
+        item.unitPrice = priceInfo.unitPrice;
+
+        // 기존 price 필드는 총 상품 금액으로 저장
+        item.price = priceInfo.unitPrice * quantity;
+        item.lineTotal = priceInfo.unitPrice * quantity;
+
+        if (!item.extras && Array.isArray(item.toppings)) {
+            item.extras = item.toppings;
+        }
+
+    });
+
+    return cart;
+}
+
+
+/* =========================
+   장바구니 화면 출력
+========================= */
+
+function renderCart() {
+
+    let cart = getCart();
+
+    cart = updateCartPrices(cart);
+    saveCart(cart);
+
+    cartList.innerHTML = '';
+
+    const totalQuantity = cart.reduce((sum, item) => {
+        return sum + Number(item.quantity || 1);
+    }, 0);
+
+    const totalPrice = cart.reduce((sum, item) => {
+        return sum + Number(item.lineTotal || 0);
+    }, 0);
+
+    cartCount.textContent = `${totalQuantity}개`;
+
+    productTotal.textContent = formatPrice(totalPrice);
+    finalTotal.textContent = formatPrice(totalPrice);
+
+    if (cart.length === 0) {
+
+        emptyCart.hidden = false;
+        priceSummary.hidden = true;
+        checkoutBtn.disabled = true;
+
+        return;
+    }
+
+    emptyCart.hidden = true;
+    priceSummary.hidden = false;
+    checkoutBtn.disabled = false;
+
+
+    cart.forEach((item, index) => {
+
+        const priceInfo = getItemPrice(item);
+
+        const quantity = Number(item.quantity) || 1;
+
+        const card = document.createElement('article');
+        card.className = 'cart-item';
+
+
+        /* 메뉴 이미지 영역 */
+
+        const image = document.createElement('div');
+        image.className = 'cart-item-image';
+
+        image.textContent =
+            item.category === 'tteokbokki'
+                ? '떡볶이'
+                : item.category === 'side'
+                    ? 'SIDE'
+                    : 'DRINK';
+
+
+        /* 메뉴 정보 */
+
+        const info = document.createElement('div');
+        info.className = 'cart-item-info';
+
+        const name = document.createElement('h3');
+        name.textContent = item.name;
+
+        const option = document.createElement('p');
+
+        const optionText = [];
+
+        if (item.size) {
+            optionText.push(item.size);
+        }
+
+        const extras = Array.isArray(item.extras)
+            ? item.extras
+            : Array.isArray(item.toppings)
+                ? item.toppings
+                : [];
+
+        if (extras.length > 0) {
+            optionText.push(`추가: ${extras.join(', ')}`);
+        }
+
+        option.textContent = optionText.length
+            ? optionText.join(' · ')
+            : '기본 구성';
+
+
+        /* 가격 정보 */
+
+        const priceInfoBox = document.createElement('div');
+        priceInfoBox.className = 'cart-price-info';
+
+        const unitPrice = document.createElement('span');
+        unitPrice.textContent =
+            `개당 ${formatPrice(priceInfo.unitPrice)}`;
+
+        const linePrice = document.createElement('strong');
+        linePrice.textContent =
+            formatPrice(priceInfo.unitPrice * quantity);
+
+        priceInfoBox.append(unitPrice, linePrice);
+
+
+        /* 수량 및 버튼 */
+
+        const controls = document.createElement('div');
+        controls.className = 'item-controls';
+
+        const quantityControl = document.createElement('div');
+        quantityControl.className = 'quantity-control';
+
+        const minus = document.createElement('button');
+        minus.type = 'button';
+        minus.textContent = '−';
+
+        minus.addEventListener('click', () => {
+            changeQuantity(index, -1);
+        });
+
+        const quantityText = document.createElement('span');
+        quantityText.textContent = quantity;
+
+        const plus = document.createElement('button');
+        plus.type = 'button';
+        plus.textContent = '+';
+
+        plus.addEventListener('click', () => {
+            changeQuantity(index, 1);
+        });
+
+        quantityControl.append(
+            minus,
+            quantityText,
+            plus
+        );
+
+
+        /* 옵션 수정 */
+
+        const edit = document.createElement('button');
+        edit.type = 'button';
+        edit.className = 'text-btn';
+        edit.textContent = '옵션 수정';
+
+        edit.addEventListener('click', () => {
+            editOptions(index);
+        });
+
+
+        /* 삭제 */
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'text-btn delete-btn';
+        remove.textContent = '삭제';
+
+        remove.addEventListener('click', () => {
+            removeItem(index);
+        });
+
+
+        controls.append(
+            quantityControl,
+            edit,
+            remove
+        );
+
+        info.append(
+            name,
+            option,
+            priceInfoBox,
+            controls
+        );
+
+        card.append(image, info);
+
+        cartList.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================
+   수량 변경
+========================= */
+
+function changeQuantity(index, amount) {
+
+    const cart = getCart();
+
+    const item = cart[index];
+
+    if (!item) return;
+
+    item.quantity = Math.max(
+        1,
+        Math.min(99, Number(item.quantity || 1) + amount)
+    );
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================
+   메뉴 삭제
+========================= */
+
+function removeItem(index) {
+
+    const cart = getCart();
+
+    cart.splice(index, 1);
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================
+   옵션 수정
+========================= */
+
+function editOptions(index) {
+
+    const cart = getCart();
+
+    const item = cart[index];
+
+    if (!item) return;
+
+    if (item.category !== 'tteokbokki') {
+        alert('이 메뉴는 별도 옵션이 없습니다.');
+        return;
+    }
+
+
+    /* 사이즈 변경 */
+
+    const size = prompt(
+        '사이즈를 입력해 주세요.\n혼자볶이 / 둘이볶이 / 셋이볶이',
+        item.size || '혼자볶이'
+    );
+
+    if (size === null) return;
+
+    const selectedSize = size.trim();
+
+    if (!allowedSizes.includes(selectedSize)) {
+        alert('혼자볶이, 둘이볶이, 셋이볶이 중에서 입력해 주세요.');
+        return;
+    }
+
+
+    /* 추가 재료 변경 */
+
+    const currentExtras = Array.isArray(item.extras)
+        ? item.extras
+        : Array.isArray(item.toppings)
+            ? item.toppings
+            : [];
+
+    const extras = prompt(
+        '추가 재료를 쉼표로 구분해 입력해 주세요.\n\n떡, 어묵, 소세지, 당면, 중국당면, 분모자, 유부\n\n없으면 비워 두세요.',
+        currentExtras.join(', ')
+    );
+
+    if (extras === null) return;
+
+    const selectedExtras = extras
+        .split(',')
+        .map(value => value.trim())
+        .filter(value => allowedExtras.includes(value));
+
+    item.size = selectedSize;
+    item.extras = [...new Set(selectedExtras)];
+
+    const priceInfo = getItemPrice(item);
+
+    const quantity = Number(item.quantity) || 1;
+
+    item.basePrice = priceInfo.basePrice;
+    item.toppingPrice = priceInfo.toppingPrice;
+    item.unitPrice = priceInfo.unitPrice;
+    item.price = priceInfo.unitPrice * quantity;
+    item.lineTotal = priceInfo.unitPrice * quantity;
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================
+   주문 정보 입력하기
+========================= */
+
+checkoutBtn.addEventListener('click', () => {
+
+    const cart = getCart();
+
+    if (cart.length === 0) return;
+
+    location.href = '../payment_finish/payment_finish.html';
+
+});
+
+
+/* =========================
+   첫 화면 실행
+========================= */
+
+renderCart();
+
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/payment.css">
+    <script src="js/payment.js" defer></script>
+</head>
+<body>
+
+<div class="page-wrap">
+    <header class="header">
+        <a href="../../index.html" class="back-button" aria-label="홈으로">‹</a>
+        <a href="../../index.html" class="logo">
+            <img src="../../img/LOGO.png" alt="입덕볶이">
+        </a>
+        <span class="header-space"></span>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <p class="eyebrow">MY CART</p>
+            <h1>장바구니</h1>
+            <p>먹고 싶은 메뉴를 확인해 봐!</p>
+        </section>
+
+        <section class="cart-section">
+            <div class="cart-heading">
+                <h2>주문 메뉴</h2>
+                <span id="cartCount">0개</span>
+            </div>
+
+            <div id="cartList" class="cart-list"></div>
+
+            <div id="emptyCart" class="empty-cart" hidden>
+                <div class="empty-icon">!</div>
+                <h3>장바구니가 비어 있어요</h3>
+                <p>맛있는 떡볶이를 담아볼까요?</p>
+                <a href="../lists/lists.html" class="empty-button">메뉴 보러 가기</a>
+            </div>
+        </section>
+
+        <section class="summary-section">
+            <h2>결제 금액</h2>
+
+            <div class="summary-row">
+                <span>메뉴 금액</span>
+                <strong id="menuTotal">0원</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>배달비</span>
+                <strong id="deliveryFee">3,000원</strong>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row total-row">
+                <span>총 결제 금액</span>
+                <strong id="grandTotal">0원</strong>
+            </div>
+        </section>
+
+        <section class="notice">
+            <strong>주문 전 확인해 주세요!</strong>
+            <p>메뉴 및 옵션을 다시 한번 확인한 뒤 주문해 주세요.</p>
+        </section>
+    </main>
+
+    <footer class="bottom-bar">
+        <div class="bottom-total">
+            <span>총 결제 금액</span>
+            <strong id="bottomTotal">0원</strong>
+        </div>
+        <button type="button" id="checkoutBtn" disabled>주문하기</button>
+    </footer>
+</div>
+
+<!-- 옵션 수정 팝업 -->
+<div class="modal-overlay" id="editModal" hidden>
+    <section class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+        <button type="button" class="modal-close" id="editClose" aria-label="닫기">×</button>
+
+        <p class="eyebrow">EDIT MENU</p>
+        <h2 id="editTitle">메뉴 수정하기</h2>
+        <p class="edit-description" id="editDescription"></p>
+
+        <div id="editSizeArea" class="edit-area">
+            <h3>사이즈 선택</h3>
+            <div class="size-list">
+                <label><input type="radio" name="editSize" value="혼자볶이"> 혼자볶이</label>
+                <label><input type="radio" name="editSize" value="둘이볶이"> 둘이볶이</label>
+                <label><input type="radio" name="editSize" value="셋이볶이"> 셋이볶이</label>
+            </div>
+        </div>
+
+        <div id="editExtrasArea" class="edit-area">
+            <h3>추가 재료</h3>
+            <div class="extras-list" id="editExtras"></div>
+        </div>
+
+        <div class="edit-quantity">
+            <span>수량</span>
+            <div class="quantity-control">
+                <button type="button" id="editMinus">−</button>
+                <strong id="editQuantity">1</strong>
+                <button type="button" id="editPlus">+</button>
+            </div>
+        </div>
+
+        <div class="edit-price">
+            <span>변경 후 금액</span>
+            <strong id="editPrice">0원</strong>
+        </div>
+
+        <button type="button" class="save-edit-button" id="saveEdit">변경 내용 저장</button>
+    </section>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 주문하기 | 입덕볶이</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/lists.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <a href="../../index.html" class="back-btn">〈</a>
+        <a href="../../index.html" class="page-logo">입덕볶이</a>
+        <a href="../payment/payment.html" class="cart-link">장바구니</a>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <p class="eyebrow">IPDEOK BOKKI</p>
+            <h1>메뉴 주문하기</h1>
+            <p>오늘은 어떤 맛으로 입덕해볼까?</p>
+        </section>
+
+        <nav class="category-tabs">
+            <button class="category-tab active" data-category="tteokbokki">떡볶이</button>
+            <button class="category-tab" data-category="side">사이드</button>
+            <button class="category-tab" data-category="drink">음료</button>
+        </nav>
+
+        <section class="product-grid" id="productGrid"></section>
+    </main>
+
+    <div class="modal-overlay" id="optionOverlay">
+        <div class="option-modal">
+            <button class="modal-close" id="optionClose" aria-label="닫기">×</button>
+            <p class="modal-label">MAKE YOUR MENU</p>
+            <h2 id="optionName">입덕볶이</h2>
+            <p class="modal-description" id="optionDescription"></p>
+
+            <div class="option-section" id="sizeSection">
+                <h3>사이즈 선택</h3>
+                <div class="size-options">
+                    <label><input type="radio" name="size" value="혼자볶이" checked><span>혼자볶이</span></label>
+                    <label><input type="radio" name="size" value="둘이볶이"><span>둘이볶이</span></label>
+                    <label><input type="radio" name="size" value="셋이볶이"><span>셋이볶이</span></label>
+                </div>
+            </div>
+
+            <div class="option-section" id="extraSection">
+                <h3>추가 재료 선택</h3>
+                <div class="extra-options">
+                    <label><input type="checkbox" value="떡"><span>떡</span></label>
+                    <label><input type="checkbox" value="어묵"><span>어묵</span></label>
+                    <label><input type="checkbox" value="소세지"><span>소세지</span></label>
+                    <label><input type="checkbox" value="당면"><span>당면</span></label>
+                    <label><input type="checkbox" value="중국당면"><span>중국당면</span></label>
+                    <label><input type="checkbox" value="분모자"><span>분모자</span></label>
+                    <label><input type="checkbox" value="유부"><span>유부</span></label>
+                </div>
+            </div>
+
+            <div class="option-section" id="quantitySection">
+                <h3>수량</h3>
+                <div class="quantity-control">
+                    <button type="button" id="quantityMinus">−</button>
+                    <span id="quantityValue">1</span>
+                    <button type="button" id="quantityPlus">＋</button>
+                </div>
+            </div>
+
+            <button class="primary-btn" id="addCartBtn">장바구니에 담기</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="completeOverlay">
+        <div class="complete-modal">
+            <div class="complete-icon">✓</div>
+            <h2>장바구니에 담았어요!</h2>
+            <p>더 둘러보고 담을까요?</p>
+            <div class="complete-buttons">
+                <button type="button" class="secondary-btn" id="continueBtn">더 담기</button>
+                <button type="button" class="primary-btn" id="goCartBtn">장바구니 보기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const products = {
+    tteokbokki: [
+        { name: '입덕볶이', description: '기본에 충실 !' },
+        { name: '달달볶이', description: '학교 앞 분식집 맛 !' },
+        { name: '위염볶이', description: '오늘은 위에 구멍이 나게 !' },
+        { name: '크림볶이', description: '오늘은 부드럽게 ,' },
+        { name: '로제볶이', description: '조금은 덜 느끼하게,' },
+        { name: '바질볶이', description: '힐링은 향긋하게 ,' },
+        { name: '마라볶이', description: '벌써 찾아왔어 마라주기 !' },
+        { name: '말차볶이', description: '뭐? 요즘 이게 유행이라고?' },
+        { name: '해물볶이', description: '난 바다 없이 못살아 ,' }
+    ],
+    side: [
+        { name: '혼자튀김', description: '혼자서도 알차게 즐기는 튀김' },
+        { name: '둘이튀김', description: '둘이서 넉넉하게 즐기는 튀김' },
+        { name: '누드순대', description: '쫄깃하고 담백한 순대' },
+        { name: '꼬치어묵', description: '따뜻하고 탱글한 어묵' },
+        { name: '주먹밥', description: '떡볶이와 함께 먹기 좋은 주먹밥' },
+        { name: '계란찜', description: '부드럽고 포근한 계란찜' },
+        { name: '감자튀김', description: '바삭바삭한 감자튀김' }
+    ],
+    drink: [
+        { name: '콜라', description: '시원한 콜라', image: '../../img/cola.jpg' },
+        { name: '사이다', description: '톡 쏘는 사이다', image: '../../img/Sprite%20.jpg' },
+        { name: '쿨피스', description: '달콤상큼 쿨피스', image: '../../img/coolpic.jpg' },
+        { name: '우유', description: '고소한 우유', image: '../../img/mlik.jpg' },
+        { name: '제로콜라', description: '가볍게 즐기는 제로콜라' },
+        { name: '제로사이다', description: '깔끔한 제로사이다' },
+        { name: '단지우유', description: '달콤한 단지우유' },
+        { name: '오렌지주스', description: '상큼한 오렌지주스' },
+        { name: '환타', description: '톡톡 튀는 환타' }
+    ]
+};
+
+const grid = document.getElementById('productGrid');
+const tabs = document.querySelectorAll('.category-tab');
+const optionOverlay = document.getElementById('optionOverlay');
+const completeOverlay = document.getElementById('completeOverlay');
+
+let currentCategory = 'tteokbokki';
+let selectedProduct = null;
+let selectedQuantity = 1;
+
+function renderProducts(category) {
+    currentCategory = category;
+    grid.innerHTML = '';
+
+    products[category].forEach((product, index) => {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+
+        const image = document.createElement('div');
+        image.className = 'product-image';
+
+        if (product.image) {
+            image.style.backgroundImage = `url("${product.image}")`;
+        } else {
+            image.classList.add('no-image');
+            image.textContent = product.name;
+        }
+
+        const info = document.createElement('div');
+        info.className = 'product-info';
+
+        const name = document.createElement('h2');
+        name.textContent = product.name;
+
+        const description = document.createElement('p');
+        description.textContent = product.description;
+
+        const button = document.createElement('button');
+        button.className = 'product-order-btn';
+        button.textContent = '주문하기';
+        button.addEventListener('click', () => openOptions(product, category));
+
+        info.append(name, description, button);
+        card.append(image, info);
+        grid.appendChild(card);
+    });
+
+    tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === category);
+    });
+}
+
+function openOptions(product, category) {
+    selectedProduct = { ...product, category };
+    selectedQuantity = 1;
+
+    document.getElementById('optionName').textContent = product.name;
+    document.getElementById('optionDescription').textContent = product.description;
+    document.getElementById('quantityValue').textContent = selectedQuantity;
+
+    const isTteokbokki = category === 'tteokbokki';
+    document.getElementById('sizeSection').hidden = !isTteokbokki;
+    document.getElementById('extraSection').hidden = !isTteokbokki;
+
+    document.querySelector('input[name="size"][value="혼자볶이"]').checked = true;
+    document.querySelectorAll('.extra-options input').forEach(input => input.checked = false);
+
+    optionOverlay.classList.add('show');
+}
+
+function closeOptions() {
+    optionOverlay.classList.remove('show');
+}
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => renderProducts(tab.dataset.category));
+});
+
+document.getElementById('optionClose').addEventListener('click', closeOptions);
+
+optionOverlay.addEventListener('click', event => {
+    if (event.target === optionOverlay) closeOptions();
+});
+
+document.getElementById('quantityMinus').addEventListener('click', () => {
+    selectedQuantity = Math.max(1, selectedQuantity - 1);
+    document.getElementById('quantityValue').textContent = selectedQuantity;
+});
+
+document.getElementById('quantityPlus').addEventListener('click', () => {
+    selectedQuantity += 1;
+    document.getElementById('quantityValue').textContent = selectedQuantity;
+});
+
+function getCart() {
+    try {
+        return JSON.parse(localStorage.getItem('ipdeokCart')) || [];
+    } catch {
+        return [];
+    }
+}
+
+document.getElementById('addCartBtn').addEventListener('click', () => {
+    if (!selectedProduct) return;
+
+    const size = selectedProduct.category === 'tteokbokki'
+        ? document.querySelector('input[name="size"]:checked').value
+        : '';
+
+    const extras = selectedProduct.category === 'tteokbokki'
+        ? Array.from(document.querySelectorAll('.extra-options input:checked')).map(input => input.value)
+        : [];
+
+    const cart = getCart();
+
+    cart.push({
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name: selectedProduct.name,
+        category: selectedProduct.category,
+        description: selectedProduct.description,
+        size,
+        extras,
+        quantity: selectedQuantity
+    });
+
+    localStorage.setItem('ipdeokCart', JSON.stringify(cart));
+
+    closeOptions();
+    completeOverlay.classList.add('show');
+});
+
+document.getElementById('continueBtn').addEventListener('click', () => {
+    completeOverlay.classList.remove('show');
+    renderProducts('tteokbokki');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.getElementById('goCartBtn').addEventListener('click', () => {
+    location.href = '../payment/payment.html';
+});
+
+const params = new URLSearchParams(location.search);
+const requestedItem = params.get('item');
+
+renderProducts('tteokbokki');
+
+if (requestedItem) {
+    const product = products.tteokbokki.find(item => item.name === requestedItem);
+    if (product) {
+        setTimeout(() => openOptions(product, 'tteokbokki'), 150);
+    }
+}
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 주문하기 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/lists.css">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <a href="../../index.html" class="back-btn" aria-label="뒤로 가기">〈</a>
+
+        <a href="../../index.html" class="page-logo">
+            <img src="../../img/LOGO.png" alt="입덕볶이 로고">
+        </a>
+
+        <a href="../payment/payment.html" class="cart-link">장바구니</a>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <p class="eyebrow">IPDEOK BOKKI</p>
+            <h1>메뉴 주문하기</h1>
+            <p>오늘은 어떤 맛으로 입덕해볼까?</p>
+        </section>
+
+        <nav class="category-tabs" aria-label="메뉴 카테고리">
+            <button class="category-tab active" data-category="tteokbokki" type="button">떡볶이</button>
+            <button class="category-tab" data-category="side" type="button">사이드</button>
+            <button class="category-tab" data-category="drink" type="button">음료</button>
+        </nav>
+
+        <section class="product-grid" id="productGrid"></section>
+    </main>
+
+    <!-- CSS로 만든 떠기 -->
+    <div class="tteogi tteogi-floating" aria-hidden="true">
+        <div class="tteogi-sauce"></div>
+        <div class="tteogi-eye left"></div>
+        <div class="tteogi-eye right"></div>
+        <div class="tteogi-mouth"></div>
+        <div class="tteogi-cheek left"></div>
+        <div class="tteogi-cheek right"></div>
+    </div>
+
+    <!-- 옵션 선택 팝업 -->
+    <div class="modal-overlay" id="optionOverlay">
+        <div class="option-modal" role="dialog" aria-modal="true" aria-labelledby="optionName">
+
+            <button class="modal-close" id="optionClose" type="button" aria-label="닫기">×</button>
+
+            <p class="modal-label">MAKE YOUR MENU</p>
+            <h2 id="optionName">입덕볶이</h2>
+            <p class="modal-description" id="optionDescription"></p>
+
+            <div class="option-section" id="sizeSection">
+                <h3>🍚 사이즈 선택</h3>
+                <div class="size-options">
+                    <label>
+                        <input type="radio" name="size" value="혼자볶이" checked>
+                        <span>혼자볶이</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="size" value="둘이볶이">
+                        <span>둘이볶이</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="size" value="셋이볶이">
+                        <span>셋이볶이</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="option-section" id="extraSection">
+                <h3>🧀 추가 재료 선택</h3>
+                <div class="extra-options">
+                    <label><input type="checkbox" value="떡"><span>떡 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="어묵"><span>어묵 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="소세지"><span>소세지 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="당면"><span>당면 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="중국당면"><span>중국당면 <small>+1,500원</small></span></label>
+                    <label><input type="checkbox" value="분모자"><span>분모자 <small>+1,500원</small></span></label>
+                    <label><input type="checkbox" value="유부"><span>유부 <small>+1,000원</small></span></label>
+                </div>
+            </div>
+
+            <div class="option-price-box">
+                <div>
+                    <span>기본 가격</span>
+                    <strong id="basePrice">8,900원</strong>
+                </div>
+                <div>
+                    <span>추가 재료</span>
+                    <strong id="extraPrice">0원</strong>
+                </div>
+                <div class="option-total">
+                    <span>총 상품 금액</span>
+                    <strong id="totalPrice">8,900원</strong>
+                </div>
+            </div>
+
+            <div class="option-section">
+                <h3>수량</h3>
+                <div class="quantity-control">
+                    <button type="button" id="quantityMinus" aria-label="수량 줄이기">−</button>
+                    <span id="quantityValue">1</span>
+                    <button type="button" id="quantityPlus" aria-label="수량 늘리기">＋</button>
+                </div>
+            </div>
+
+            <button class="primary-btn" id="addCartBtn" type="button">
+                장바구니에 담기 · <span id="buttonPrice">8,900원</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 장바구니 담기 완료 -->
+    <div class="modal-overlay" id="completeOverlay">
+        <div class="complete-modal">
+            <div class="complete-mascot">
+                <div class="tteogi complete-tteogi">
+                    <div class="tteogi-sauce"></div>
+                    <div class="tteogi-eye left"></div>
+                    <div class="tteogi-eye right"></div>
+                    <div class="tteogi-mouth"></div>
+                    <div class="tteogi-cheek left"></div>
+                    <div class="tteogi-cheek right"></div>
+                </div>
+            </div>
+
+            <h2>장바구니에 담았어!</h2>
+            <p>맛있는 메뉴가 하나 더 추가됐어.</p>
+
+            <div class="complete-buttons">
+                <button type="button" class="secondary-btn" id="continueBtn">더 담기</button>
+                <button type="button" class="primary-btn" id="goCartBtn">장바구니 보기</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/lists.js"></script>
+</body>
+</html>
