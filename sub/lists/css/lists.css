@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -69,12 +70,32 @@ a {
     object-fit: contain;
 }
 
+/* CART ICON */
+
 .cart-link {
-    padding: 7px 12px;
-    border: 1px solid #E8D5BF;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: #F1E1CC;
+    transition: .2s ease;
+}
+
+.cart-link svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: #75452F;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cart-link:active {
+    transform: scale(.92);
+    background: #E8D5BF;
 }
 
 /* PAGE HEADING */
@@ -206,13 +227,15 @@ a {
 
 .product-order-btn {
     width: 100%;
-    height: 34px;
+    min-height: 36px;
     margin-top: 10px;
+    padding: 5px 3px;
     border-radius: 8px;
     background: #C94F3D;
     color: #fff;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .product-order-btn:active,
@@ -361,6 +384,7 @@ a {
     width: 14px;
     height: 14px;
     accent-color: #C94F3D;
+    flex-shrink: 0;
 }
 
 .extra-options label:has(input:checked) {
@@ -449,6 +473,12 @@ a {
     font-weight: 700;
 }
 
+.primary-btn span {
+    color: #FFF0C9;
+}
+
+/* COMPLETE MODAL */
+
 .complete-modal {
     width: 100%;
     max-width: 320px;
@@ -471,10 +501,7 @@ a {
 }
 
 .complete-tteogi {
-    position: relative;
-    width: 100px;
-    height: 70px;
-    transform: scale(.8);
+    transform: scale(.9);
 }
 
 .complete-modal h2 {
@@ -508,33 +535,52 @@ a {
     font-weight: 700;
 }
 
-/* TTEOGI CSS CHARACTER */
+/* TTEOGI CHARACTER */
 
 .tteogi {
     position: relative;
     width: 82px;
-    height: 58px;
-    border: 3px solid #75452F;
-    border-radius: 45% 48% 42% 43%;
-    background: #FFFDF4;
-    box-shadow: inset -5px -4px 0 #F1E1CC;
+    height: 59px;
+    border: 2.5px solid #75452F;
+    border-radius: 22px 25px 20px 22px;
+    background: #FFFEF8;
+    box-shadow:
+        inset -4px -5px 0 #F1E5D2,
+        0 3px 0 rgba(117, 69, 47, .08);
 }
+
+/* 소스 */
 
 .tteogi-sauce {
     position: absolute;
-    top: -5px;
-    right: 8px;
-    width: 36px;
-    height: 20px;
+    z-index: 2;
+    top: -7px;
+    left: 34px;
+    width: 34px;
+    height: 19px;
     border: 2px solid #75452F;
-    border-radius: 55% 50% 30% 40%;
+    border-radius: 60% 45% 45% 35%;
     background: #E85B35;
     transform: rotate(-12deg);
 }
 
+.tteogi-sauce::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: -5px;
+    width: 7px;
+    height: 9px;
+    border-radius: 0 0 5px 5px;
+    background: #E85B35;
+}
+
+/* 눈 */
+
 .tteogi-eye {
     position: absolute;
-    top: 23px;
+    z-index: 3;
+    top: 24px;
     width: 5px;
     height: 7px;
     border-radius: 50%;
@@ -542,28 +588,34 @@ a {
 }
 
 .tteogi-eye.left {
-    left: 23px;
+    left: 24px;
 }
 
 .tteogi-eye.right {
     right: 22px;
 }
 
+/* 입 */
+
 .tteogi-mouth {
     position: absolute;
-    top: 33px;
-    left: 34px;
-    width: 10px;
+    z-index: 3;
+    top: 34px;
+    left: 36px;
+    width: 9px;
     height: 6px;
     border-bottom: 2px solid #75452F;
     border-radius: 50%;
 }
 
+/* 볼 */
+
 .tteogi-cheek {
     position: absolute;
-    top: 34px;
-    width: 10px;
-    height: 6px;
+    z-index: 2;
+    top: 36px;
+    width: 9px;
+    height: 5px;
     border-radius: 50%;
     background: #F5A09A;
 }
@@ -573,8 +625,10 @@ a {
 }
 
 .tteogi-cheek.right {
-    right: 11px;
+    right: 10px;
 }
+
+/* 떠끼 위치 및 애니메이션 */
 
 .tteogi-floating {
     position: fixed;
@@ -587,10 +641,11 @@ a {
 
 @keyframes tteogiFloat {
     0%, 100% {
-        transform: translateY(0) rotate(-4deg);
+        transform: translateY(0) rotate(-3deg);
     }
+
     50% {
-        transform: translateY(-12px) rotate(4deg);
+        transform: translateY(-9px) rotate(3deg);
     }
 }
 
@@ -610,6 +665,10 @@ a {
 
     .product-info h2 {
         font-size: 16px;
+    }
+
+    .product-order-btn {
+        font-size: 10px;
     }
 
     .option-modal {

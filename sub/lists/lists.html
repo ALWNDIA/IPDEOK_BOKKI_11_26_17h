@@ -433,3 +433,164 @@ if (requestedItem) {
 <script src="js/lists.js"></script>
 </body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 주문하기 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/lists.css">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <a href="../../index.html" class="back-btn" aria-label="뒤로 가기">〈</a>
+
+        <a href="../../index.html" class="page-logo">
+            <img src="../../img/LOGO.png" alt="입덕볶이 로고">
+        </a>
+
+        <a href="../payment/payment.html" class="cart-link" aria-label="장바구니 보기">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 3h2l2.2 11.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6"/>
+                <circle cx="10" cy="20" r="1.3"/>
+                <circle cx="18" cy="20" r="1.3"/>
+            </svg>
+        </a>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <p class="eyebrow">IPDEOK BOKKI</p>
+            <h1>메뉴 주문하기</h1>
+            <p>오늘은 어떤 맛으로 입덕해볼까?</p>
+        </section>
+
+        <nav class="category-tabs" aria-label="메뉴 카테고리">
+            <button class="category-tab active" data-category="tteokbokki" type="button">떡볶이</button>
+            <button class="category-tab" data-category="side" type="button">사이드</button>
+            <button class="category-tab" data-category="drink" type="button">음료</button>
+        </nav>
+
+        <section class="product-grid" id="productGrid"></section>
+    </main>
+
+    <!-- 떠끼 -->
+    <div class="tteogi tteogi-floating" aria-hidden="true">
+        <div class="tteogi-sauce"></div>
+        <div class="tteogi-eye left"></div>
+        <div class="tteogi-eye right"></div>
+        <div class="tteogi-mouth"></div>
+        <div class="tteogi-cheek left"></div>
+        <div class="tteogi-cheek right"></div>
+    </div>
+
+    <!-- 옵션 선택 팝업 -->
+    <div class="modal-overlay" id="optionOverlay">
+        <div class="option-modal" role="dialog" aria-modal="true" aria-labelledby="optionName">
+
+            <button class="modal-close" id="optionClose" type="button" aria-label="닫기">×</button>
+
+            <p class="modal-label">MAKE YOUR MENU</p>
+            <h2 id="optionName">입덕볶이</h2>
+            <p class="modal-description" id="optionDescription"></p>
+
+            <div class="option-section" id="sizeSection">
+                <h3>🍚 사이즈 선택</h3>
+                <div class="size-options">
+                    <label>
+                        <input type="radio" name="size" value="혼자볶이" checked>
+                        <span>혼자볶이</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="size" value="둘이볶이">
+                        <span>둘이볶이</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="size" value="셋이볶이">
+                        <span>셋이볶이</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="option-section" id="extraSection">
+                <h3>🧀 추가 재료 선택</h3>
+                <div class="extra-options">
+                    <label><input type="checkbox" value="떡"><span>떡 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="어묵"><span>어묵 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="소세지"><span>소세지 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="당면"><span>당면 <small>+1,000원</small></span></label>
+                    <label><input type="checkbox" value="중국당면"><span>중국당면 <small>+1,500원</small></span></label>
+                    <label><input type="checkbox" value="분모자"><span>분모자 <small>+1,500원</small></span></label>
+                    <label><input type="checkbox" value="유부"><span>유부 <small>+1,000원</small></span></label>
+                </div>
+            </div>
+
+            <div class="option-price-box">
+                <div>
+                    <span>기본 가격</span>
+                    <strong id="basePrice">8,900원</strong>
+                </div>
+                <div>
+                    <span>추가 재료</span>
+                    <strong id="extraPrice">0원</strong>
+                </div>
+                <div class="option-total">
+                    <span>총 상품 금액</span>
+                    <strong id="totalPrice">8,900원</strong>
+                </div>
+            </div>
+
+            <div class="option-section">
+                <h3>수량</h3>
+                <div class="quantity-control">
+                    <button type="button" id="quantityMinus" aria-label="수량 줄이기">−</button>
+                    <span id="quantityValue">1</span>
+                    <button type="button" id="quantityPlus" aria-label="수량 늘리기">＋</button>
+                </div>
+            </div>
+
+            <button class="primary-btn" id="addCartBtn" type="button">
+                장바구니에 담기 · <span id="buttonPrice">8,900원</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 장바구니 담기 완료 -->
+    <div class="modal-overlay" id="completeOverlay">
+        <div class="complete-modal">
+            <div class="complete-mascot">
+                <div class="tteogi complete-tteogi">
+                    <div class="tteogi-sauce"></div>
+                    <div class="tteogi-eye left"></div>
+                    <div class="tteogi-eye right"></div>
+                    <div class="tteogi-mouth"></div>
+                    <div class="tteogi-cheek left"></div>
+                    <div class="tteogi-cheek right"></div>
+                </div>
+            </div>
+
+            <h2>장바구니에 담았어!</h2>
+            <p>맛있는 메뉴가 하나 더 추가됐어.</p>
+
+            <div class="complete-buttons">
+                <button type="button" class="secondary-btn" id="continueBtn">더 담기</button>
+                <button type="button" class="primary-btn" id="goCartBtn">장바구니 보기</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/lists.js"></script>
+</body>
+</html>

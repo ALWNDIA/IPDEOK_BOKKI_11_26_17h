@@ -668,8 +668,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const menuCards = document.querySelectorAll('.menu-card[data-menu-category]');
 
     function changeMenuCategory(category) {
+        const categoryCards = Array.from(menuCards).filter(card => {
+            return card.dataset.menuCategory === category;
+        });
+
         menuCards.forEach(card => {
-            card.hidden = card.dataset.menuCategory !== category;
+            card.hidden = true;
+        });
+
+        categoryCards.slice(0, 4).forEach(card => {
+            card.hidden = false;
         });
 
         menuTabs.forEach(tab => {

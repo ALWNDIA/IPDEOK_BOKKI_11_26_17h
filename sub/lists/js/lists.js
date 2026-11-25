@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================
@@ -74,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const quantityValue = document.getElementById('quantityValue');
 
-    let currentCategory = 'tteokbokki';
     let selectedProduct = null;
     let selectedQuantity = 1;
 
@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ========================= */
 
     function renderProducts(category) {
-        currentCategory = category;
         grid.innerHTML = '';
 
         products[category].forEach(product => {
@@ -129,16 +128,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const price = document.createElement('strong');
             price.className = 'product-price';
 
+            let buttonPrice;
+
             if (category === 'tteokbokki') {
-                price.textContent = `${won(product.prices[0])}~`;
+                buttonPrice = `${won(product.prices[0])}~`;
+                price.textContent = buttonPrice;
             } else {
-                price.textContent = won(product.price);
+                buttonPrice = won(product.price);
+                price.textContent = buttonPrice;
             }
 
             const button = document.createElement('button');
             button.className = 'product-order-btn';
             button.type = 'button';
-            button.textContent = '주문하기';
+            button.textContent = `주문하기 · ${buttonPrice}`;
 
             button.addEventListener('click', () => {
                 openOptions(product, category);
@@ -211,8 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
             closeOptions();
-            completeOverlay.classList.remove('show');
-            document.body.style.overflow = '';
+            closeComplete();
         }
     });
 
