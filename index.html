@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,7 +11,229 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- PHONE ORDER POPUP STYLE -->
+    <style>
+        .phone-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2300;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            background: rgba(73, 42, 25, 0.55);
+
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .phone-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .phone-modal {
+            position: relative;
+
+            width: 100%;
+            max-width: 330px;
+
+            padding: 28px 24px 24px;
+
+            border: 1px solid #F1E1CC;
+            border-radius: 22px;
+
+            background: #FFF8ED;
+
+            text-align: center;
+
+            box-shadow: 0 12px 35px rgba(73, 42, 25, 0.2);
+
+            transform: translateY(15px) scale(0.96);
+            transition: transform 0.25s ease;
+        }
+
+        .phone-modal-overlay.active .phone-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .phone-modal-close {
+            position: absolute;
+            top: 11px;
+            right: 14px;
+
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: transparent;
+            color: #75452F;
+
+            font-size: 26px;
+            font-weight: 300;
+        }
+
+        .phone-modal-eyebrow {
+            margin-bottom: 15px;
+
+            color: #C94F3D;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .phone-modal-mascot {
+            position: relative;
+
+            width: 88px;
+            height: 88px;
+
+            margin: 0 auto 15px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            background: #FCD893;
+
+            font-size: 46px;
+        }
+
+        .phone-modal-sparkle {
+            position: absolute;
+            top: 2px;
+            right: -8px;
+
+            color: #E68A45;
+            font-size: 23px;
+        }
+
+        .phone-modal h2 {
+            margin-bottom: 9px;
+
+            color: #75452F;
+
+            font-family: 'Jua', sans-serif;
+            font-size: 27px;
+            font-weight: 400;
+        }
+
+        .phone-modal-description {
+            margin-bottom: 22px;
+
+            color: #A17C63;
+
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .phone-number-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            padding: 17px 12px;
+
+            border: 1px dashed #D9B99B;
+            border-radius: 12px;
+
+            background: #FFFAF2;
+        }
+
+        .phone-number-label {
+            color: #A17C63;
+            font-size: 11px;
+        }
+
+        .phone-number-box strong {
+            color: #C94F3D;
+
+            font-family: 'Jua', sans-serif;
+            font-size: 21px;
+            font-weight: 400;
+        }
+
+        .phone-hours-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            margin: 13px 0 18px;
+            padding: 13px;
+
+            border-radius: 12px;
+
+            background: #F1E1CC;
+
+            text-align: left;
+        }
+
+        .phone-hours-icon {
+            font-size: 24px;
+        }
+
+        .phone-hours-box strong {
+            display: block;
+            margin-bottom: 4px;
+
+            color: #75452F;
+            font-size: 12px;
+        }
+
+        .phone-hours-box p {
+            color: #A17C63;
+            font-size: 11px;
+        }
+
+        .phone-call-button {
+            width: 100%;
+            height: 46px;
+
+            border-radius: 10px;
+
+            background: #D8C8B7;
+            color: #FFF8ED;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            cursor: not-allowed;
+        }
+
+        .phone-modal-notice {
+            margin-top: 12px;
+
+            color: #B49A83;
+            font-size: 10px;
+        }
+
+        @media (max-width: 360px) {
+            .phone-modal {
+                padding: 27px 19px 22px;
+            }
+
+            .phone-modal h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -22,7 +245,7 @@
         </a>
 
         <div class="header-icons">
-            <a href="sub/detail/detail.html" class="header-icon-btn" aria-label="마이페이지">
+            <a href="sub/mypage/mypage.html" class="header-icon-btn" aria-label="마이페이지">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                     <circle cx="12" cy="8" r="3.5"/>
                     <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>
@@ -54,7 +277,7 @@
         </div>
 
         <ul class="side-menu-list">
-            <li><a href="sub/detail/detail.html">마이페이지</a></li>
+            <li><a href="sub/mypage/mypage.html">마이페이지</a></li>
             <li><a href="sub/payment/payment.html">장바구니</a></li>
             <li><a href="sub/lists/lists.html">떡볶이 주문하기</a></li>
             <li><a href="#event">이벤트</a></li>
@@ -406,6 +629,52 @@
           fill="#FFFDF4" stroke="#75452F" stroke-width="5" stroke-linecap="round"/>
 </svg>
 
+<!-- 전화 주문 팝업 -->
+<div class="phone-modal-overlay" id="phoneModal">
+    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phoneModalTitle">
+
+        <button class="phone-modal-close" id="phoneModalClose" type="button" aria-label="팝업 닫기">
+            ×
+        </button>
+
+        <p class="phone-modal-eyebrow">IPDEOK BOKKI</p>
+
+        <div class="phone-modal-mascot" aria-hidden="true">
+            🍡
+            <span class="phone-modal-sparkle">✦</span>
+        </div>
+
+        <h2 id="phoneModalTitle">전화로 주문하기</h2>
+
+        <p class="phone-modal-description">
+            맛있는 입덕볶이를<br>
+            전화로 주문해 보세요!
+        </p>
+
+        <div class="phone-number-box">
+            <span class="phone-number-label">매장 전화번호</span>
+            <strong>전화번호 준비 중</strong>
+        </div>
+
+        <div class="phone-hours-box">
+            <span class="phone-hours-icon">⏰</span>
+            <div>
+                <strong>운영 시간</strong>
+                <p>매일 10:00 ~ 20:00</p>
+            </div>
+        </div>
+
+        <button class="phone-call-button" type="button" disabled>
+            전화번호 준비 중
+        </button>
+
+        <p class="phone-modal-notice">
+            전화번호가 정해지면 바로 연결할 수 있어요!
+        </p>
+
+    </div>
+</div>
+
 <!-- 주문 옵션 팝업 -->
 <div class="order-modal-overlay" id="orderModal">
     <div class="order-modal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
@@ -566,15 +835,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.side-menu-list a').forEach(link => {
         link.addEventListener('click', closeMenu);
-    });
-
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape') {
-            closeMenu();
-            closeOrderModal();
-            closeCartConfirm();
-            deliveryModal.classList.remove('active');
-        }
     });
 
     /* RECOMMEND SLIDER */
@@ -848,6 +1108,37 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target === cartConfirmModal) closeCartConfirm();
     });
 
+    /* PHONE ORDER MODAL */
+    const phoneModal = document.getElementById('phoneModal');
+    const phoneOrderBtn = document.getElementById('phoneOrderBtn');
+    const phoneModalClose = document.getElementById('phoneModalClose');
+
+    function openPhoneModal() {
+        phoneModal.classList.add('active');
+        document.body.classList.add('modal-open');
+    }
+
+    function closePhoneModal() {
+        phoneModal.classList.remove('active');
+
+        if (
+            !orderModal.classList.contains('active') &&
+            !cartConfirmModal.classList.contains('active') &&
+            !deliveryModal.classList.contains('active')
+        ) {
+            document.body.classList.remove('modal-open');
+        }
+    }
+
+    phoneOrderBtn.addEventListener('click', openPhoneModal);
+    phoneModalClose.addEventListener('click', closePhoneModal);
+
+    phoneModal.addEventListener('click', event => {
+        if (event.target === phoneModal) {
+            closePhoneModal();
+        }
+    });
+
     /* MAIN ORDER BUTTONS */
     document.getElementById('deliveryOrderBtn').addEventListener('click', () => {
         location.href = 'sub/lists/lists.html';
@@ -857,12 +1148,8 @@ document.addEventListener('DOMContentLoaded', function () {
         location.href = 'sub/lists/lists.html';
     });
 
-    document.getElementById('phoneOrderBtn').addEventListener('click', () => {
-        alert('전화 주문 기능은 준비 중이야!');
-    });
-
     document.getElementById('couponBtn').addEventListener('click', () => {
-        location.href = 'sub/detail/detail.html#coupons';
+        location.href = 'sub/coupon/coupon.html';
     });
 
     /* DELIVERY STATUS */
@@ -935,6 +1222,17 @@ document.addEventListener('DOMContentLoaded', function () {
         deliveryStep++;
         localStorage.setItem('ipdeokDeliveryStatus', String(deliveryStep));
         loadDeliveryStatus();
+    });
+
+    /* ESC KEY */
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeMenu();
+            closeOrderModal();
+            closeCartConfirm();
+            closePhoneModal();
+            deliveryModal.classList.remove('active');
+        }
     });
 
     loadDeliveryStatus();

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰함 | 입덕볶이</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Jua&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/coupon.css">
+    <script src="js/coupon.js" defer></script>
+</head>
+<body>
+    <div class="coupon-page">
+
+        <header class="coupon-header">
+            <a class="back-button" href="../../index.html" aria-label="홈으로 돌아가기">‹</a>
+            <a class="header-logo" href="../../index.html">입덕볶이</a>
+            <span class="header-spacer"></span>
+        </header>
+
+        <main class="coupon-main">
+
+            <section class="page-heading">
+                <span class="heading-emoji">🎟️</span>
+                <p class="eyebrow">IPDEOK BOKKI BENEFIT</p>
+                <h1>나의 쿠폰함</h1>
+                <p class="heading-description">맛있는 입덕볶이를 더 기분 좋게 즐겨봐!</p>
+            </section>
+
+            <section class="coupon-summary" aria-live="polite">
+                <div>
+                    <span class="summary-label">사용 가능한 쿠폰</span>
+                    <strong>
+                        <span id="availableCount">2</span>
+                        <small>장</small>
+                    </strong>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div>
+                    <span class="summary-label">사용한 쿠폰</span>
+                    <strong>
+                        <span id="usedCount">0</span>
+                        <small>장</small>
+                    </strong>
+                </div>
+            </section>
+
+            <section class="coupon-list-section">
+
+                <div class="list-heading">
+                    <h2>사용 가능한 쿠폰</h2>
+                    <span class="list-caption">쿠폰은 한 번만 사용할 수 있어요</span>
+                </div>
+
+                <div class="coupon-list" id="couponList">
+
+                    <!-- 첫 번째 쿠폰 -->
+                    <article class="coupon-card coupon-card-orange" data-coupon-id="first-15000">
+
+                        <div class="coupon-card-main">
+
+                            <div class="coupon-topline">
+                                <span class="coupon-tag">WELCOME COUPON</span>
+                                <span class="coupon-sparkle">✦</span>
+                            </div>
+
+                            <div class="discount-line">
+                                <strong>3,000<span>원</span></strong>
+                                <span class="discount-label">할인</span>
+                            </div>
+
+                            <h3>첫 주문 쿠폰</h3>
+
+                            <p class="coupon-condition">
+                                15,000원 이상 결제 시 사용 가능
+                            </p>
+
+                            <div class="coupon-bottomline">
+                                <span>입덕볶이 첫 주문 혜택</span>
+                                <span class="coupon-stamp">WELCOME!</span>
+                            </div>
+
+                        </div>
+
+                        <div class="coupon-card-action">
+                            <span class="ticket-hole"></span>
+
+                            <span class="minimum-label">최소 주문 금액</span>
+                            <strong>15,000원</strong>
+
+                            <button
+                                class="use-coupon-button"
+                                type="button"
+                                data-use-coupon="first-15000">
+                                쿠폰 사용하기
+                            </button>
+                        </div>
+
+                    </article>
+
+                    <!-- 두 번째 쿠폰 -->
+                    <article class="coupon-card coupon-card-yellow" data-coupon-id="first-20000">
+
+                        <div class="coupon-card-main">
+
+                            <div class="coupon-topline">
+                                <span class="coupon-tag">WELCOME COUPON</span>
+                                <span class="coupon-sparkle">✦</span>
+                            </div>
+
+                            <div class="discount-line">
+                                <strong>5,000<span>원</span></strong>
+                                <span class="discount-label">할인</span>
+                            </div>
+
+                            <h3>첫 주문 쿠폰</h3>
+
+                            <p class="coupon-condition">
+                                20,000원 이상 결제 시 사용 가능
+                            </p>
+
+                            <div class="coupon-bottomline">
+                                <span>입덕볶이 첫 주문 혜택</span>
+                                <span class="coupon-stamp">WELCOME!</span>
+                            </div>
+
+                        </div>
+
+                        <div class="coupon-card-action">
+                            <span class="ticket-hole"></span>
+
+                            <span class="minimum-label">최소 주문 금액</span>
+                            <strong>20,000원</strong>
+
+                            <button
+                                class="use-coupon-button"
+                                type="button"
+                                data-use-coupon="first-20000">
+                                쿠폰 사용하기
+                            </button>
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <!-- 쿠폰이 없을 때 -->
+                <div class="empty-coupons" id="emptyCoupons" hidden>
+                    <span class="empty-emoji">🍡</span>
+                    <h3>앗, 사용 가능한 쿠폰이 없어!</h3>
+                    <p>새로운 쿠폰이 생기면 여기에 보여줄게.</p>
+                </div>
+
+            </section>
+
+            <!-- 쿠폰 이용 안내 -->
+            <section class="coupon-notice">
+                <h2><span>📌</span> 쿠폰 이용 안내</h2>
+
+                <ul>
+                    <li>쿠폰은 안내된 최소 결제 금액을 충족할 때 사용할 수 있어요.</li>
+                    <li>각 쿠폰은 한 번만 사용할 수 있으며, 사용 완료 후 목록에서 사라져요.</li>
+                    <li>현재 쿠폰 사용은 화면 확인용으로 구현되어 있으며 실제 결제 금액에는 연동되지 않아요.</li>
+                </ul>
+            </section>
+
+            <a class="home-link" href="../../index.html">
+                홈으로 돌아가기
+            </a>
+
+        </main>
+
+        <footer class="coupon-footer">
+            IPDEOK BOKKI · 오늘도 맛있게, 입덕!
+        </footer>
+
+    </div>
+
+    <!-- 쿠폰 사용 확인 팝업 -->
+    <div class="confirm-overlay" id="confirmOverlay" aria-hidden="true">
+
+        <section
+            class="confirm-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirmTitle">
+
+            <span class="confirm-emoji">🍡</span>
+
+            <h2 id="confirmTitle">쿠폰을 사용할까?</h2>
+
+            <p id="confirmMessage">
+                한 번 사용하면 쿠폰함에서 사라져!
+            </p>
+
+            <div class="confirm-actions">
+                <button class="cancel-button" id="cancelUse" type="button">
+                    다음에
+                </button>
+
+                <button class="confirm-button" id="confirmUse" type="button">
+                    사용할래!
+                </button>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- 쿠폰 사용 완료 메시지 -->
+    <div class="toast-message" id="toastMessage" role="status" aria-live="polite">
+        쿠폰을 사용했어!
+    </div>
+
+</body>
+</html>

@@ -1773,3 +1773,641 @@ body.modal-open {
         padding: 11px;
     }
 }
+
+
+/* ========================================
+   RECOMMEND MENU : 귀여운 카드 디자인
+======================================== */
+
+/* 모든 추천 메뉴 카드 */
+.recommend-card {
+    position: relative;
+    border: 2px solid #F1D8B5;
+    border-radius: 20px;
+    box-shadow: 0 5px 12px rgba(117, 69, 47, 0.10);
+    overflow: visible;
+    transition:
+        background-color 0.4s ease,
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        border-color 0.4s ease;
+}
+
+/* 가운데 활성화된 카드 */
+.recommend-card.active {
+    border: 3px solid #FFF8ED;
+    border-radius: 20px;
+    box-shadow:
+        0 10px 24px rgba(73, 42, 25, 0.22),
+        0 3px 8px rgba(73, 42, 25, 0.10);
+    transform: translateY(12px) scale(1.01);
+}
+
+/* 활성화 카드 안쪽 점선 장식 */
+.recommend-card.active::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1.5px dashed rgba(255, 248, 237, 0.65);
+    border-radius: 13px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 카드 내용 */
+.recommend-info {
+    position: relative;
+    z-index: 2;
+    padding: 15px 8px 0;
+    color: #75452F;
+}
+
+/* 활성화 카드 기본 글씨 */
+.recommend-card.active .recommend-info {
+    color: #75452F;
+}
+
+/* BEST 번호 */
+.recommend-number {
+    font-family: 'Jua', sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+}
+
+/* 메뉴 설명 */
+.recommend-description {
+    margin-top: 7px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 메뉴 이름 */
+.recommend-name {
+    margin-top: 9px;
+    font-family: 'Jua', sans-serif;
+    font-size: 27px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+/* 가격 */
+.recommend-price {
+    margin-top: 6px;
+    font-family: 'Jua', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* 주문하기 버튼 */
+.recommend-btn {
+    position: relative;
+    z-index: 3;
+    width: 105px;
+    height: 33px;
+    margin-top: 13px;
+
+    border: 1.5px solid #75452F;
+    border-radius: 20px;
+
+    background: #75452F;
+    color: #FFF8ED;
+
+    font-family: 'Jua', sans-serif;
+    font-size: 14px;
+
+    box-shadow: 0 3px 0 rgba(73, 42, 25, 0.15);
+    transition: all 0.2s ease;
+}
+
+/* 활성화된 카드의 주문 버튼 */
+.recommend-card.active .recommend-btn {
+    border: 1.5px solid #FFF8ED;
+    background: #FFF8ED;
+    color: #75452F;
+    box-shadow: 0 3px 0 rgba(73, 42, 25, 0.18);
+}
+
+/* 버튼 누르는 효과 */
+.recommend-btn:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+/* 메뉴 이미지 영역 */
+.recommend-image {
+    border: 3px solid #FFF8ED;
+    border-radius: 18px;
+    box-shadow: 0 5px 13px rgba(73, 42, 25, 0.16);
+    background-color: #F3C58B;
+}
+
+/* ========================================
+   어두운 배경 메뉴 : 밝은 글씨
+======================================== */
+
+/* 입덕볶이 */
+.recommend-card.active[data-color="#C94F3D"] .recommend-info,
+
+/* 위염볶이 */
+.recommend-card.active[data-color="#D94B3D"] .recommend-info,
+
+/* 마라볶이 */
+.recommend-card.active[data-color="#B94136"] .recommend-info {
+    color: #FFF8ED;
+}
+
+/* 어두운 카드의 가격 */
+.recommend-card.active[data-color="#C94F3D"] .recommend-price,
+.recommend-card.active[data-color="#D94B3D"] .recommend-price,
+.recommend-card.active[data-color="#B94136"] .recommend-price {
+    color: #FFF0D8;
+}
+
+/* 어두운 카드 버튼은 밝은 크림색으로 */
+.recommend-card.active[data-color="#C94F3D"] .recommend-btn,
+.recommend-card.active[data-color="#D94B3D"] .recommend-btn,
+.recommend-card.active[data-color="#B94136"] .recommend-btn {
+    background: #FFF8ED;
+    border-color: #FFF8ED;
+    color: #75452F;
+}
+
+/* ========================================
+   작은 화면 대응
+======================================== */
+
+@media (max-width: 360px) {
+    .recommend-card {
+        border-radius: 17px;
+    }
+
+    .recommend-name {
+        font-size: 25px;
+    }
+
+    .recommend-description {
+        font-size: 11px;
+    }
+
+    .recommend-btn {
+        width: 100px;
+        height: 31px;
+    }
+}
+
+/* ========================================
+   추천 메뉴 이미지
+======================================== */
+
+.recommend-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 입덕볶이 */
+.recommend-card:nth-of-type(1) .recommend-image {
+    background-image: url("../img/basic_bokki.jpg");
+}
+
+/* 달달볶이 */
+.recommend-card:nth-of-type(2) .recommend-image {
+    background-image: url("../img/sweet_bokki.png");
+}
+
+/* 위염볶이 */
+.recommend-card:nth-of-type(3) .recommend-image {
+    background-image: url("../img/spicy_bokki.jpg");
+}
+
+/* 크림볶이 */
+.recommend-card:nth-of-type(4) .recommend-image {
+    background-image: url("../img/cream_bokki.jpg");
+}
+
+/* 로제볶이 */
+.recommend-card:nth-of-type(5) .recommend-image {
+    background-image: url("../img/rose_bokki.jpg");
+}
+
+/* 바질볶이 */
+.recommend-card:nth-of-type(6) .recommend-image {
+    background-image: url("../img/basil_bokki.jpg");
+}
+
+/* 마라볶이 */
+.recommend-card:nth-of-type(7) .recommend-image {
+    background-image: url("../img/mara_bokki.jpg");
+}
+
+/* 말차볶이 */
+.recommend-card:nth-of-type(8) .recommend-image {
+    background-image: url("../img/matcha_bokki.jpg");
+}
+
+/* 해물볶이 */
+.recommend-card:nth-of-type(9) .recommend-image {
+    background-image: url("../img/seafood_bokki.jpg");
+}
+
+
+/* ========================================
+   메뉴 페이지 이미지
+======================================== */
+
+.menu-card:nth-of-type(1) .menu-image {
+    background-image: url("../img/basic_bokki.jpg");
+}
+
+.menu-card:nth-of-type(2) .menu-image {
+    background-image: url("../img/sweet_bokki.png");
+}
+
+.menu-card:nth-of-type(3) .menu-image {
+    background-image: url("../img/spicy_bokki.jpg");
+}
+
+.menu-card:nth-of-type(4) .menu-image {
+    background-image: url("../img/cream_bokki.jpg");
+}
+
+.menu-card:nth-of-type(5) .menu-image {
+    background-image: url("../img/rose_bokki.jpg");
+}
+
+.menu-card:nth-of-type(6) .menu-image {
+    background-image: url("../img/basil_bokki.jpg");
+}
+
+.menu-card:nth-of-type(7) .menu-image {
+    background-image: url("../img/mara_bokki.jpg");
+}
+
+.menu-card:nth-of-type(8) .menu-image {
+    background-image: url("../img/matcha_bokki.jpg");
+}
+
+.menu-card:nth-of-type(9) .menu-image {
+    background-image: url("../img/seafood_bokki.jpg");
+}
+
+/* 메뉴 이미지 공통 */
+.menu-card[data-menu-category="tteokbokki"] .menu-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* ========================================
+   HEADER : 중앙 로고 + 좌측 마이페이지
+======================================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    height: 68px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFF8ED;
+    border-bottom: 1px solid #F1E1CC;
+    box-shadow: 0 2px 10px rgba(117, 69, 47, 0.05);
+}
+
+/* 로고 중앙 정렬 및 크기 확대 */
+.header .logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.header .logo img {
+    width: auto;
+    height: 42px;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+/* 아이콘 그룹 */
+.header-icons {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    padding: 0 20px;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* 아이콘 버튼 */
+.header-icon-btn {
+    width: 29px;
+    height: 29px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #75452F;
+    background: transparent;
+
+    pointer-events: auto;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.header-icon-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 마이페이지 아이콘 왼쪽 끝으로 */
+.header-icons .header-icon-btn:first-child {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 마이페이지 아이콘 클릭 효과 */
+.header-icons .header-icon-btn:first-child:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+/* 오른쪽 아이콘 클릭 효과 */
+.header-icons .header-icon-btn:not(:first-child):active {
+    transform: scale(0.9);
+}
+
+
+/* ========================================
+   HERO : 귀여운 메인 배너
+======================================== */
+
+.hero {
+    position: relative;
+
+    width: 100%;
+    height: 470px;
+
+    margin: 0 auto;
+
+    background-color: #F1E1CC;
+    background-image: url("../img/event.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border: 3px solid #FFF8ED;
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 15px rgba(117, 69, 47, 0.10),
+        0 2px 5px rgba(117, 69, 47, 0.05);
+}
+
+/* 배너 안쪽 점선 장식 */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+
+    border: 1.5px dashed rgba(255, 248, 237, 0.85);
+    border-radius: 15px;
+
+    pointer-events: none;
+}
+
+/* 배너 하단 귀여운 문구 */
+.hero::after {
+    content: "오늘도 입덕 완료 ♡";
+
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+
+    transform: translateX(-50%);
+
+    padding: 10px 20px;
+
+    border: 1px solid #F1D8B5;
+    border-radius: 30px;
+
+    background-color: rgba(255, 248, 237, 0.94);
+
+    color: #75452F;
+
+    font-family: 'Jua', sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;
+
+    box-shadow: 0 3px 10px rgba(73, 42, 25, 0.12);
+}
+
+
+/* ========================================
+   SECTION 1 : ORDER BUTTONS
+======================================== */
+
+.section-1 {
+    padding: 18px 20px 54px;
+    background-color: #FFF8ED;
+}
+
+.order-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 버튼 공통 */
+.order-btn {
+    position: relative;
+
+    height: 76px;
+    min-height: 76px;
+
+    border: 2px solid #FFF8ED;
+    border-radius: 19px;
+
+    color: #FFFFFF;
+
+    font-family: 'Jua', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+
+    box-shadow:
+        0 5px 0 rgba(117, 69, 47, 0.12),
+        0 7px 13px rgba(117, 69, 47, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+/* 메인 배달 주문 버튼 */
+.delivery-btn {
+    width: 100%;
+    height: 90px;
+    min-height: 90px;
+
+    border: 3px solid #F5D6B9;
+    border-radius: 21px;
+
+    background: linear-gradient(
+        135deg,
+        #D95D48,
+        #C94F3D
+    );
+
+    color: #FFF8ED;
+
+    font-size: 23px;
+
+    box-shadow:
+        0 6px 0 #A83F32,
+        0 9px 16px rgba(117, 69, 47, 0.15);
+}
+
+/* 메인 버튼 장식 */
+.delivery-btn::before {
+    content: "✦";
+
+    position: absolute;
+    left: 20px;
+    top: 13px;
+
+    color: #FFE2A9;
+    font-size: 19px;
+}
+
+.delivery-btn::after {
+    content: "🍡";
+
+    position: absolute;
+    right: 19px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 27px;
+}
+
+/* 하단 보조 버튼 */
+.sub-order-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* 전화 주문 */
+.sub-order-buttons .order-btn:first-child {
+    flex: 1;
+
+    background: linear-gradient(
+        135deg,
+        #E99A58,
+        #E68A45
+    );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 5px 0 #C87838,
+        0 7px 12px rgba(117, 69, 47, 0.08);
+}
+
+/* 쿠폰 사용 */
+.sub-order-buttons .order-btn:last-child {
+    flex: 1;
+
+    background: linear-gradient(
+        135deg,
+        #967052,
+        #75452F
+    );
+
+    color: #FFF8ED;
+
+    box-shadow:
+        0 5px 0 #5D3524,
+        0 7px 12px rgba(117, 69, 47, 0.08);
+}
+
+/* 버튼 누르는 효과 */
+.order-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 rgba(117, 69, 47, 0.15);
+    filter: brightness(0.97);
+}
+
+/* 키보드 접근 시 표시 */
+.order-btn:focus-visible {
+    outline: 3px solid #FCD893;
+    outline-offset: 3px;
+}
+
+
+/* ========================================
+   SMALL MOBILE
+======================================== */
+
+@media (max-width: 360px) {
+
+    .header {
+        height: 64px;
+    }
+
+    .header .logo img {
+        height: 37px;
+        max-height: 37px;
+    }
+
+    .header-icons {
+        padding: 0 15px;
+        gap: 11px;
+    }
+
+    .header-icons .header-icon-btn:first-child {
+        left: 15px;
+    }
+
+    .hero {
+        height: 420px;
+        border-radius: 18px;
+    }
+
+    .hero::after {
+        bottom: 18px;
+        font-size: 15px;
+        padding: 9px 17px;
+    }
+
+    .delivery-btn {
+        height: 82px;
+        min-height: 82px;
+        font-size: 21px;
+    }
+
+    .sub-order-buttons .order-btn {
+        height: 70px;
+        min-height: 70px;
+        font-size: 18px;
+    }
+}
